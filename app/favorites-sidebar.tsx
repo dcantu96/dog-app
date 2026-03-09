@@ -36,9 +36,7 @@ export function FavoritesSidebar() {
 							</button>
 							<button
 								type="button"
-								onClick={() => {
-									removeFavorite(dog)
-								}}
+								onClick={() => removeFavorite(dog)}
 								className="shrink-0 rounded px-1 py-0.5 text-zinc-500 hover:bg-zinc-100 hover:text-red-600"
 								title="Remove from favorites"
 							>
