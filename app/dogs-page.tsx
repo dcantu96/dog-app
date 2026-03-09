@@ -2,10 +2,16 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { useTRPC } from '~/trpc/client'
+import type { Dog } from './dog-viewer-context'
+import { DogViewerProvider } from './dog-viewer-context'
 import { DogsContent } from './dogs-content'
-import { MainDogProvider } from './main-dog-context'
+import { FavoritesProvider } from './favorites-context'
 
-export function DogsPage() {
+export function DogsPage({
+	initialFavorites = [],
+}: {
+	initialFavorites?: Dog[]
+}) {
 	const trpc = useTRPC()
 	const {
 		data: dogs,
@@ -18,8 +24,10 @@ export function DogsPage() {
 	if (!dogs?.length) return <p>No dogs.</p>
 
 	return (
-		<MainDogProvider dogs={dogs}>
-			<DogsContent />
-		</MainDogProvider>
+		<DogViewerProvider dogs={dogs}>
+			<FavoritesProvider initialFavorites={initialFavorites}>
+				<DogsContent />
+			</FavoritesProvider>
+		</DogViewerProvider>
 	)
 }
