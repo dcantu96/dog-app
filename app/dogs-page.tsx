@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { useTRPC } from '~/trpc/client'
-// import { DogsContent } from './dogs-content'
+import { DogsContent } from './dogs-content'
 import { MainDogProvider } from './main-dog-context'
 
 export function DogsPage() {
@@ -17,5 +17,9 @@ export function DogsPage() {
 	if (error) return <p>Error: {error.message}</p>
 	if (!dogs?.length) return <p>No dogs.</p>
 
-	return <MainDogProvider dogs={dogs}>{/* <DogsContent /> */}</MainDogProvider>
+	return (
+		<MainDogProvider dogs={dogs}>
+			<DogsContent />
+		</MainDogProvider>
+	)
 }
