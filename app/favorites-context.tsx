@@ -1,5 +1,6 @@
 'use client'
 
+import { useMutation } from '@tanstack/react-query'
 import {
 	createContext,
 	type ReactNode,
@@ -8,6 +9,7 @@ import {
 	useMemo,
 	useState,
 } from 'react'
+import { useTRPC } from '~/trpc/client'
 import type { Dog } from './dog-viewer-context'
 
 type FavoritesContextValue = {
@@ -23,14 +25,6 @@ function isSameDog(a: Dog, b: Dog) {
 	return a.image === b.image && a.breed === b.breed
 }
 
-function persistFavorites(favorites: Dog[]) {
-	fetch('/api/favorites', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ favorites }),
-	}).catch(() => {})
-}
-
 export function FavoritesProvider({
 	children,
 	initialFavorites = [],
@@ -38,25 +32,27 @@ export function FavoritesProvider({
 	children: ReactNode
 	initialFavorites?: Dog[]
 }) {
+	const trpc = useTRPC()
 	const [favorites, setFavorites] = useState<Dog[]>(initialFavorites)
+	const { mutate } = useMutation(trpc.favorites.set.mutationOptions())
 
 	const addFavorite = useCallback(
 		(dog: Dog) => {
 			if (favorites.some((f) => isSameDog(f, dog))) return
 			const next = [...favorites, dog]
 			setFavorites(next)
-			persistFavorites(next)
+			mutate({ favorites: next })
 		},
-		[favorites],
+		[favorites, mutate],
 	)
 
 	const removeFavorite = useCallback(
 		(dog: Dog) => {
 			const next = favorites.filter((f) => !isSameDog(f, dog))
 			setFavorites(next)
-			persistFavorites(next)
+			mutate({ favorites: next })
 		},
-		[favorites],
+		[favorites, mutate],
 	)
 
 	const isFavorite = useCallback(
