@@ -9,7 +9,7 @@ export const dogsRouter = createTRPCRouter({
 				`https://dog.ceo/api/breeds/image/random/${input}`,
 			)
 			const data = await response.json()
-			console.log('called getRandomDogs')
+
 			if (data.status !== 'success') {
 				throw new Error('Failed to fetch random dogs')
 			}
