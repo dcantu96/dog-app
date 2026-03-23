@@ -1,15 +1,11 @@
 import { cookies } from 'next/headers'
 import z from 'zod'
+import { dogSchema } from '~/app/dog'
 import {
 	FAVORITES_COOKIE_MAX_AGE,
 	FAVORITES_COOKIE_NAME,
 } from '~/app/favorites-cookie'
 import { baseProcedure, createTRPCRouter } from '../init'
-
-const dogSchema = z.object({
-	image: z.string(),
-	breed: z.string(),
-})
 
 export const favoritesRouter = createTRPCRouter({
 	set: baseProcedure

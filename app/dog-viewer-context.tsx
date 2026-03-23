@@ -7,8 +7,9 @@ import {
 	useMemo,
 	useState,
 } from 'react'
+import type { Dog } from './dog'
 
-export type Dog = { image: string; breed: string }
+export type { Dog }
 
 type DogViewerContextValue = {
 	mainDog: Dog
